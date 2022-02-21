@@ -1,65 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_hero/ExpenseScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const WalletHero());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class WalletHero extends StatelessWidget {
+  const WalletHero({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Wallet Hero',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
-      home: const MyHomePage(title: 'Flutter Demo'),
+      home: const MainPage(
+        title: 'Wallet Hero',
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainPageState extends State<MainPage> {
+  int currentIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final appScreens = const [
+    Center(
+      child: Text("Home"),
+    ),
+    ExpenseScreen(),
+    Center(
+      child: Text("Summary"),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      backgroundColor: Colors.blue,
+      body: IndexedStack(
+        index: currentIndex,
+        children: appScreens,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        tooltip: "Add Expense",
+        child: const Text(
+          "\$",
+          style: TextStyle(color: Colors.blue),
+        ),
+        backgroundColor: Colors.white,
+        onPressed: () {
+          setState(() {
+            currentIndex = 1;
+          });
+        },
       ),
+      bottomNavigationBar: Theme(
+          data: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            currentIndex: currentIndex,
+            onTap: (index) => setState(() {
+              if (index == 1) return;
+              currentIndex = index;
+            }),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "Add Expense",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: "Summary",
+              )
+            ],
+          )),
     );
   }
 }
