@@ -5,7 +5,9 @@ import 'main.dart';
 
 class HomeScreen extends StatefulWidget {
   final List<ExpenseData> data;
-  const HomeScreen({Key? key, required this.data}) : super(key: key);
+  final Function addNewExpense;
+  const HomeScreen({Key? key, required this.data, required this.addNewExpense})
+      : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -34,11 +36,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     Center(
                       child: createCard(
                         const Text(
-                          "No expense data found",
+                          "No expense data found.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 25,
                           ),
+                        ),
+                      ),
+                    ),
+                    createCard(
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          widget.addNewExpense();
+                        },
+                        icon: const Icon(
+                          Icons.check,
+                          size: 30,
+                        ),
+                        label: const Text(
+                          "Add a new expense",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(0, 75),
                         ),
                       ),
                     ),
@@ -71,13 +91,29 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> createExpenses(List<ExpenseData> data) {
     List<Widget> expenses = [];
 
-    data.forEach((element) {
-      // expenses.add(
-      //   createCard(),
-      // );
-    });
+    for (var element in data) {
+      expenses.add(
+        createCard(createExpense(element)),
+      );
+    }
 
     return expenses;
+  }
+
+  Widget createExpense(ExpenseData data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(data.date.toString()),
+        Row(
+          children: [
+            Text(data.note),
+            const Spacer(),
+            Text(data.total),
+          ],
+        )
+      ],
+    );
   }
 
   Widget createCard(Widget content) {

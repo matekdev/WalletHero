@@ -38,12 +38,17 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
   final List<ExpenseData> expenses = [
-    ExpenseData(DateTime.now(), "\$25.00", "test"),
+    // ExpenseData(DateTime.now(), "\$25.00", "test"),
   ];
 
   late var appScreens = [
     HomeScreen(
       data: expenses,
+      addNewExpense: () => {
+        setState(() {
+          currentIndex = 1;
+        })
+      },
     ),
     ExpenseScreen(
       onAdd: (amount, desc) => {
