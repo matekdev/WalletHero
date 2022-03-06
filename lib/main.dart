@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_hero/ExpenseScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wallet_hero/HomeScreen.dart';
 import 'package:wallet_hero/SummaryScreen.dart';
 
 void main() {
@@ -36,9 +37,13 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
+  final List<ExpenseData> expenses = [
+    ExpenseData(DateTime.now(), "\$25.00", "test"),
+  ];
+
   late var appScreens = [
-    const Center(
-      child: Text("Home"),
+    HomeScreen(
+      data: expenses,
     ),
     ExpenseScreen(
       onAdd: (amount, desc) => {
@@ -104,4 +109,22 @@ class _MainPageState extends State<MainPage> {
           )),
     );
   }
+
+  Widget createCard(Widget content) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: content,
+      ),
+    );
+  }
+}
+
+class ExpenseData {
+  DateTime date;
+  String total;
+  String note;
+
+  ExpenseData(this.date, this.total, this.note);
 }
