@@ -95,7 +95,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     size: 30,
                   ),
                   label: const Text(
-                    "Add a new expense",
+                    "Add expense",
                     style: TextStyle(fontSize: 20),
                   ),
                   style: ElevatedButton.styleFrom(
