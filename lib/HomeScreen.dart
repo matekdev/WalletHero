@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 
 import 'main.dart';
 
@@ -76,6 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+                    createCard(
+                      Text(
+                        getMonth(DateTime.now()),
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     ...createExpenses(widget.data),
                   ],
                 ),
@@ -88,12 +101,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return DateFormat.MMMM().format(date);
   }
 
+  String getMonthDay(DateTime date) {
+    return DateFormat('EEEE, dd').format(date);
+  }
+
   List<Widget> createExpenses(List<ExpenseData> data) {
     List<Widget> expenses = [];
 
     for (var element in data) {
       expenses.add(
-        createCard(createExpense(element)),
+        createCardButton(element),
       );
     }
 
@@ -104,7 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(data.date.toString()),
+        Text(
+          getMonthDay(data.date),
+          style: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         Row(
           children: [
             Text(data.note),
@@ -122,6 +145,56 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: content,
+      ),
+    );
+  }
+
+  Widget createCardButton(ExpenseData data) {
+    return InkWell(
+      customBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(
+                text: '${getMonthDay(data.date)} - ${data.note} ${data.total}'))
+            .then((_) {
+          Flushbar(
+            flushbarPosition: FlushbarPosition.BOTTOM,
+            title: "",
+            titleSize: 0,
+            message: "Expense copied",
+            duration: const Duration(seconds: 1),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ).show(context);
+        });
+      },
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                getMonthDay(data.date),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Row(
+                children: [
+                  Text(data.note),
+                  const Spacer(),
+                  Text(data.total),
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

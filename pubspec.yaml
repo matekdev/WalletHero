@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^2.3.1
   flutter_masked_text2: ^0.9.1
   intl: ^0.17.0
+  another_flushbar: ^1.10.28
 
 dev_dependencies:
   flutter_test:

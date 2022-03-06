@@ -73,7 +73,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   minLines: 4,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Enter an expense description',
+                    labelText: 'Enter an expense name',
                   ),
                 ),
               ),
