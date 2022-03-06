@@ -1,132 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class ExpenseScreen extends StatefulWidget {
-  const ExpenseScreen({Key? key}) : super(key: key);
+  final Function onAdd;
+  const ExpenseScreen({Key? key, required this.onAdd}) : super(key: key);
 
   @override
   _ExpenseScreenState createState() => _ExpenseScreenState();
 }
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
-  var total = "\$";
+  var controller = MoneyMaskedTextController(
+    leftSymbol: '\$',
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
+  var textViewController = TextEditingController();
+
+  bool isDisabled = true;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        color: Colors.lightBlue,
-        child: SafeArea(
-            child: Column(
-          children: [
-            SizedBox(
-              height: 130,
-              child: FittedBox(
-                child: Text(
-                  getFormattedTotal(total),
-                  style: const TextStyle(
-                    fontSize: 100,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: [
+              createCard(
+                const Text(
+                  "New Expense",
+                  style: TextStyle(
+                    fontSize: 35,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
                   ),
                 ),
               ),
-            ),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: createKeyboard(),
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child:
-                      const Icon(Icons.note_add_rounded, color: Colors.white),
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(20),
+              const SizedBox(
+                height: 15,
+              ),
+              createCard(
+                const Text(
+                  "What was the total expense cost?",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              createCard(
+                TextField(
+                  controller: controller,
+                  keyboardType: TextInputType.number,
+                  onChanged: (String amount) {
+                    setState(() {
+                      isDisabled = amount.contains("\$0.00");
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              createCard(
+                const Text(
+                  "If you'd like, consider adding a note to explain the purchase.",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              createCard(
+                TextField(
+                  controller: textViewController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 4,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter an expense description',
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Icon(Icons.check, color: Colors.white),
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(20),
+              ),
+              createCard(
+                ElevatedButton.icon(
+                  onPressed: isDisabled
+                      ? null
+                      : () {
+                          // Close any open keyboard.
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          widget.onAdd(
+                              controller.text, textViewController.text);
+                          controller.text = "\$0.00";
+                          textViewController.text = "";
+                          isDisabled = true;
+                        },
+                  icon: const Icon(
+                    Icons.check,
+                    size: 30,
                   ),
-                )
-              ],
-            ),
-          ],
-        )),
-      ),
-    );
-  }
-
-  String getFormattedTotal(String total) {
-    if (total.length == 1) return total;
-    return total;
-  }
-
-  createKeyboard() {
-    List<Widget> keyboard = [];
-
-    List.generate(
-      9,
-      (index) => {
-        keyboard.add(numberedButton("${index + 1}")),
-      },
-    );
-
-    keyboard.add(Text(""));
-    keyboard.add(numberedButton("0"));
-    keyboard.add(deleteButton());
-
-    return keyboard;
-  }
-
-  Widget deleteButton() {
-    return TextButton(
-      onPressed: () {
-        if (total.length > 1) {
-          setState(() {
-            total = total.substring(0, total.length - 1);
-          });
-        }
-      },
-      child: const Text(
-        "<",
-        style: TextStyle(
-          fontSize: 40,
-          color: Colors.white,
+                  label: const Text(
+                    "Add a new expense",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0, 75),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        padding: const EdgeInsets.all(24),
-      ),
     );
   }
 
-  Widget numberedButton(String num) {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          total += num;
-        });
-      },
-      child: Text(
-        num,
-        style: const TextStyle(
-          fontSize: 40,
-          color: Colors.white,
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        padding: const EdgeInsets.all(24),
+  Widget createCard(Widget content) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: content,
       ),
     );
   }

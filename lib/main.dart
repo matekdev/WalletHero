@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_hero/ExpenseScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wallet_hero/SummaryScreen.dart';
 
 void main() {
   runApp(const WalletHero());
@@ -27,6 +28,7 @@ class WalletHero extends StatelessWidget {
 class MainPage extends StatefulWidget {
   const MainPage({Key? key, required this.title}) : super(key: key);
   final String title;
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -34,24 +36,30 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
-  final appScreens = const [
-    Center(
+  late var appScreens = [
+    const Center(
       child: Text("Home"),
     ),
-    ExpenseScreen(),
-    Center(
-      child: Text("Summary"),
+    ExpenseScreen(
+      onAdd: (amount, desc) => {
+        setState(() {
+          currentIndex = 0;
+        })
+      },
+    ),
+    SummaryScreen(
+      data: currentIndex,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
       body: IndexedStack(
         index: currentIndex,
         children: appScreens,
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         tooltip: "Add Expense",
@@ -61,9 +69,11 @@ class _MainPageState extends State<MainPage> {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-          setState(() {
-            currentIndex = 1;
-          });
+          setState(
+            () {
+              currentIndex = 1;
+            },
+          );
         },
       ),
       bottomNavigationBar: Theme(
