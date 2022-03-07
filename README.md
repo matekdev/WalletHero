@@ -10,3 +10,9 @@ Allows users to input expense data which saves to their phone's shared preferenc
     <img src="./imgs/3.png" alt="3" width="300"/>
     <img src="./imgs/4.png" alt="4" width="300"/>
 </p>
+
+Video Demos
+
+https://www.youtube.com/watch?v=o32HMVYpuWo
+
+https://www.youtube.com/watch?v=AM3C_ADXMzo
