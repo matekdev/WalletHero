@@ -38,38 +38,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
-  final List<ExpenseData> expenses = [
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-    ExpenseData(DateTime.now(), "\$25.00", "Dinner at Dinos"),
-  ];
+  final List<ExpenseData> expenses = [];
 
   late var appScreens = [
     HomeScreen(
@@ -81,8 +50,12 @@ class _MainPageState extends State<MainPage> {
       },
     ),
     ExpenseScreen(
-      onAdd: (amount, desc) => {
+      onAdd: (amount, note) => {
         setState(() {
+          expenses.add(ExpenseData(DateTime.now(), amount, note));
+          appScreens[0] =
+              HomeScreen(data: expenses, addNewExpense: () => currentIndex = 1);
+          appScreens[2] = FilterScreen(data: expenses);
           currentIndex = 0;
         })
       },

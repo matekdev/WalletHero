@@ -124,7 +124,20 @@ class ExpenseFilteredScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              ...Utils.createExpenses(context, filteredData),
+              if (filteredData.isEmpty)
+                Center(
+                  child: Utils.createCard(
+                    const Text(
+                      "No expenses found for this date range.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                ...Utils.createExpenses(context, filteredData),
             ],
           ),
         ),
