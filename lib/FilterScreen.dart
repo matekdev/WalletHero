@@ -11,6 +11,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   var isButtonEnabled = false;
+  PickerDateRange? dateRange;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,16 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
                 createCard(
                   ElevatedButton.icon(
-                    onPressed: isButtonEnabled ? () {} : null,
+                    onPressed: isButtonEnabled
+                        ? () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ExpenseFilteredScreen(),
+                                ));
+                          }
+                        : null,
                     icon: const Icon(
                       Icons.filter_alt,
                       size: 30,
@@ -65,7 +75,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget createCard(Widget content) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: 500,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: content,
@@ -77,7 +87,22 @@ class _FilterScreenState extends State<FilterScreen> {
     setState(() {
       var dates = args.value as PickerDateRange;
       isButtonEnabled = dates.startDate != null && dates.endDate != null;
-      if (isButtonEnabled) {}
+      if (isButtonEnabled) {
+        dateRange = dates;
+      }
     });
+  }
+}
+
+class ExpenseFilteredScreen extends StatelessWidget {
+  const ExpenseFilteredScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text('test'),
+      ),
+    );
   }
 }

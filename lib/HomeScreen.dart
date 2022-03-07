@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         getMonth(DateTime.now()),
                         style: const TextStyle(
                           fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
