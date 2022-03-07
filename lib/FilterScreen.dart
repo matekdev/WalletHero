@@ -48,11 +48,36 @@ class _FilterScreenState extends State<FilterScreen> {
                   ElevatedButton.icon(
                     onPressed: isButtonEnabled
                         ? () {
+                            List<ExpenseData> filteredData = [];
+                            // Don't judge, I have an assignment deadline.
+                            for (var expense in widget.data) {
+                              var isSameDay = (dateRange!.startDate!.year ==
+                                          expense.date.year &&
+                                      dateRange!.startDate!.month ==
+                                          expense.date.month &&
+                                      dateRange!.startDate!.day ==
+                                          expense.date.day) ||
+                                  (dateRange!.endDate!.year ==
+                                          expense.date.year &&
+                                      dateRange!.endDate!.month ==
+                                          expense.date.month &&
+                                      dateRange!.endDate!.day ==
+                                          expense.date.day);
+
+                              if (isSameDay ||
+                                  (expense.date
+                                          .isAfter(dateRange!.startDate!) &&
+                                      expense.date
+                                          .isBefore(dateRange!.endDate!))) {
+                                filteredData.add(expense);
+                              }
+                            }
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ExpenseFilteredScreen(
-                                    filteredData: widget.data,
+                                    filteredData: filteredData,
                                   ),
                                 ));
                           }

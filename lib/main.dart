@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallet_hero/ExpenseData.dart';
 import 'package:wallet_hero/ExpenseScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet_hero/HomeScreen.dart';
 import 'package:wallet_hero/FilterScreen.dart';
 
-void main() {
-  runApp(const WalletHero());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final expenseString = prefs.getString('expense_key');
+  List<ExpenseData> expenseData = [];
+  if (expenseString != null) {
+    expenseData = ExpenseData.decode(expenseString);
+  }
+
+  expenseData.sort(((a, b) => b.date.compareTo(a.date)));
+  runApp(WalletHero(
+    data: expenseData,
+  ));
 }
 
 class WalletHero extends StatelessWidget {
-  const WalletHero({Key? key}) : super(key: key);
+  final List<ExpenseData> data;
+  const WalletHero({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +33,19 @@ class WalletHero extends StatelessWidget {
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
-      home: const MainPage(
+      home: MainPage(
         title: 'Wallet Hero',
+        data: data,
       ),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key, required this.title}) : super(key: key);
+  const MainPage({Key? key, required this.title, required this.data})
+      : super(key: key);
   final String title;
+  final List<ExpenseData> data;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -38,11 +54,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
-  final List<ExpenseData> expenses = [];
-
   late var appScreens = [
     HomeScreen(
-      data: expenses,
+      data: widget.data,
       addNewExpense: () => {
         setState(() {
           currentIndex = 1;
@@ -52,16 +66,19 @@ class _MainPageState extends State<MainPage> {
     ExpenseScreen(
       onAdd: (amount, note) => {
         setState(() {
-          expenses.add(ExpenseData(DateTime.now(), amount, note));
-          appScreens[0] =
-              HomeScreen(data: expenses, addNewExpense: () => currentIndex = 1);
-          appScreens[2] = FilterScreen(data: expenses);
+          widget.data.add(ExpenseData(DateTime.now(), amount, note));
+          saveToPrefs(widget.data);
+
+          widget.data.sort(((a, b) => b.date.compareTo(a.date)));
+          appScreens[0] = HomeScreen(
+              data: widget.data, addNewExpense: () => currentIndex = 1);
+          appScreens[2] = FilterScreen(data: widget.data);
           currentIndex = 0;
         })
       },
     ),
     FilterScreen(
-      data: expenses,
+      data: widget.data,
     ),
   ];
 
@@ -116,5 +133,11 @@ class _MainPageState extends State<MainPage> {
             ],
           )),
     );
+  }
+
+  void saveToPrefs(List<ExpenseData> data) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String encodedData = ExpenseData.encode(data);
+    await prefs.setString('expense_key', encodedData);
   }
 }

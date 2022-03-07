@@ -75,15 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    Utils.createCard(
-                      Text(
-                        Utils.getMonth(DateTime.now()),
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
                     ...Utils.createExpenses(context, widget.data),
                   ],
                 ),

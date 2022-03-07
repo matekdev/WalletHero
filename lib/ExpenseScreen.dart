@@ -62,7 +62,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               ),
               Utils.createCard(
                 const Text(
-                  "If you'd like, consider adding a note to explain the purchase.",
+                  "If you'd like, consider adding a note to explain the purchase",
                   style: TextStyle(fontSize: 20),
                 ),
               ),

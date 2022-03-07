@@ -20,7 +20,7 @@ class Utils {
   }
 
   static String getMonthDay(DateTime date) {
-    return DateFormat('EEEE, dd').format(date);
+    return DateFormat('MMMM dd, y').format(date);
   }
 
   static Widget createExpense(ExpenseData data) {
