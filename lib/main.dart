@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_hero/ExpenseData.dart';
 import 'package:wallet_hero/ExpenseScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet_hero/HomeScreen.dart';
@@ -87,7 +88,7 @@ class _MainPageState extends State<MainPage> {
       },
     ),
     FilterScreen(
-      data: currentIndex,
+      data: expenses,
     ),
   ];
 
@@ -143,22 +144,4 @@ class _MainPageState extends State<MainPage> {
           )),
     );
   }
-
-  Widget createCard(Widget content) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: content,
-      ),
-    );
-  }
-}
-
-class ExpenseData {
-  DateTime date;
-  String total;
-  String note;
-
-  ExpenseData(this.date, this.total, this.note);
 }

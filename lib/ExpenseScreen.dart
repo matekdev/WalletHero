@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:wallet_hero/Utils.dart';
 
 class ExpenseScreen extends StatefulWidget {
   final Function onAdd;
@@ -27,7 +28,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           padding: const EdgeInsets.all(10),
           child: ListView(
             children: [
-              createCard(
+              Utils.createCard(
                 const Text(
                   "New Expense",
                   style: TextStyle(
@@ -39,13 +40,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               const SizedBox(
                 height: 15,
               ),
-              createCard(
+              Utils.createCard(
                 const Text(
                   "What was the total expense cost?",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              createCard(
+              Utils.createCard(
                 TextField(
                   controller: controller,
                   keyboardType: TextInputType.number,
@@ -59,13 +60,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               const SizedBox(
                 height: 15,
               ),
-              createCard(
+              Utils.createCard(
                 const Text(
                   "If you'd like, consider adding a note to explain the purchase.",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              createCard(
+              Utils.createCard(
                 TextField(
                   controller: textViewController,
                   keyboardType: TextInputType.multiline,
@@ -77,7 +78,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   ),
                 ),
               ),
-              createCard(
+              Utils.createCard(
                 ElevatedButton.icon(
                   onPressed: isDisabled
                       ? null
@@ -106,16 +107,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget createCard(Widget content) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: content,
       ),
     );
   }

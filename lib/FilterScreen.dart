@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:wallet_hero/ExpenseData.dart';
+import 'package:wallet_hero/Utils.dart';
 
 class FilterScreen extends StatefulWidget {
-  var data;
-  FilterScreen({Key? key, this.data}) : super(key: key);
+  final List<ExpenseData> data;
+  const FilterScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   _FilterScreenState createState() => _FilterScreenState();
@@ -21,7 +23,7 @@ class _FilterScreenState extends State<FilterScreen> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                createCard(
+                Utils.createCard(
                   const Text(
                     "Filter Expenses",
                     style: TextStyle(
@@ -30,27 +32,28 @@ class _FilterScreenState extends State<FilterScreen> {
                     ),
                   ),
                 ),
-                createCard(
+                Utils.createCard(
                   const Text(
                     "Select a date range to filter your previous expenses",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                createCard(
+                Utils.createCard(
                   SfDateRangePicker(
                     selectionMode: DateRangePickerSelectionMode.range,
                     onSelectionChanged: _onSelectionChanged,
                   ),
                 ),
-                createCard(
+                Utils.createCard(
                   ElevatedButton.icon(
                     onPressed: isButtonEnabled
                         ? () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ExpenseFilteredScreen(),
+                                  builder: (context) => ExpenseFilteredScreen(
+                                    filteredData: widget.data,
+                                  ),
                                 ));
                           }
                         : null,
@@ -73,16 +76,6 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Widget createCard(Widget content) {
-    return SizedBox(
-      width: 500,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: content,
-      ),
-    );
-  }
-
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       var dates = args.value as PickerDateRange;
@@ -95,13 +88,46 @@ class _FilterScreenState extends State<FilterScreen> {
 }
 
 class ExpenseFilteredScreen extends StatelessWidget {
-  const ExpenseFilteredScreen({Key? key}) : super(key: key);
+  final List<ExpenseData> filteredData;
+  const ExpenseFilteredScreen({Key? key, required this.filteredData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('test'),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Row(
+                  children: [
+                    const Text(
+                      "Expenses",
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              ...Utils.createExpenses(context, filteredData),
+            ],
+          ),
+        ),
       ),
     );
   }
