@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.17.0
   another_flushbar: ^1.10.28
   syncfusion_flutter_datepicker: ^19.4.54
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:
