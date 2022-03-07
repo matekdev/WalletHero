@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Center(
                       child: Utils.createCard(
                         const Text(
-                          "No expense data found for this month",
+                          "No expense data found...",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 25,
