@@ -38,6 +38,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   intl: ^0.17.0
   another_flushbar: ^1.10.28
+  syncfusion_flutter_datepicker: ^19.4.54
 
 dev_dependencies:
   flutter_test:

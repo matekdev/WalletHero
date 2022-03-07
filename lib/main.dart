@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wallet_hero/ExpenseScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet_hero/HomeScreen.dart';
-import 'package:wallet_hero/SummaryScreen.dart';
+import 'package:wallet_hero/FilterScreen.dart';
 
 void main() {
   runApp(const WalletHero());
@@ -86,7 +86,7 @@ class _MainPageState extends State<MainPage> {
         })
       },
     ),
-    SummaryScreen(
+    FilterScreen(
       data: currentIndex,
     ),
   ];
@@ -137,7 +137,7 @@ class _MainPageState extends State<MainPage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.list),
-                label: "Summary",
+                label: "Filter",
               )
             ],
           )),
